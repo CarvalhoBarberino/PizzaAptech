@@ -1,0 +1,104 @@
+CREATE SCHEMA `PizzaTech` ;
+
+Tabela Cadastro de funcionarios
+	id
+	CPF
+	RG
+	Nome
+	Telefone fixo
+	Celular
+	Endereço
+	Email
+	Data de nascimento
+	Sexo
+	Funcao
+	Data de admissao
+	Login
+	Senha
+	
+CREATE TABLE `pizzatech`.`funcionarios` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `cpf` INT NULL,
+  `rg` INT NULL,
+  `nome` VARCHAR(70) NULL,
+  `telefonefixo` INT NULL,
+  `celular` INT NULL,
+  `endereco` VARCHAR(140) NULL,
+  `email` VARCHAR(70) NULL,
+  `datanascimento` VARCHAR(8) NULL,
+  `sexo` VARCHAR(45) NULL,
+  `funcao` VARCHAR(45) NULL,
+  `dataadmissao` VARCHAR(8) NULL,
+  `login` VARCHAR(45) NULL,
+  `senha` VARCHAR(32) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `CPF_UNIQUE` (`cpf` ASC),
+  UNIQUE INDEX `RG_UNIQUE` (`rg` ASC),
+  UNIQUE INDEX `Nome_UNIQUE` (`nome` ASC));
+
+Tabela Clientes
+	id
+	CPF
+	RG
+	Nome
+	Telefone Fixo
+	Celular
+	Endereço
+	Distancia
+	Email
+	Data de Nascimento
+	Data do primeiro pedido
+	Sexo
+	idDoUltimoPedido
+	
+CREATE TABLE `pizzatech`.`clientes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `cpf` INT NULL,
+  `rg` INT NULL,
+  `nome` VARCHAR(70) NULL,
+  `telefonefixo` INT NULL,
+  `celular` INT NULL,
+  `endereco` VARCHAR(140) NULL,
+  `distanciametros` INT NULL,
+  `email` VARCHAR(70) NULL,
+  `datanascimento` VARCHAR(8) NULL,
+  `datadoprimeiropedido` VARCHAR(8) NULL,
+  `sexo` VARCHAR(45) NULL,
+  `iddoultimopedido` INT NULL,
+  PRIMARY KEY (`id`));
+	
+Cadastro de produtos
+	id
+	Nome
+	Tipo
+	Preço
+	Sequencia
+	
+CREATE TABLE `pizzatech`.`produto` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(140) NULL,
+  `tipo` VARCHAR(70) NULL,
+  `preco` DOUBLE NULL,
+  `sequencia` INT NULL,
+  PRIMARY KEY (`id`));
+	
+Cadastro de pedidos
+	id
+	Data
+	idCliente
+	Especificacao
+	Valor
+	Forma de Pagamento
+	Troco previsto
+	id do funcionario
+	
+CREATE TABLE `pizzatech`.`pedidos` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `data` VARCHAR(8) NULL,
+  `idcliente` INT NULL,
+  `especificacao` VARCHAR(500) NULL,
+  `valor` DOUBLE NULL,
+  `formadepagamento` VARCHAR(45) NULL,
+  `trocoprevisto` DOUBLE NULL,
+  `iddofuncionario` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`));

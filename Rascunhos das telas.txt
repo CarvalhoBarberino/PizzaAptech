@@ -1,0 +1,64 @@
+Rascunhos das telas
+	
+	
+	Tela inicial
+		LogIn:___________
+		Senha:___________
+		Botão(Entrar){confere a senha e vai para tela principal}
+	
+	Tela principal
+		
+		Botão(Novo funcionario){vai para tela cadastrar funcionario}
+		Botao(Novo cliente){vai para tela cadastrar cliente}
+		Botao(Novo produto){vai para tela cadastrar produto}
+		Botao(Novo pedido){vai para tela cadastrar pedido}
+	
+	Tela cadastrar funcionarios
+		CPF:_________
+		RG:_________
+		Nome:_________
+		Telefone fixo:_________
+		Celular:_________
+		Endereço:_________
+		Email:_________
+		Data de nascimento:_________
+		Sexo:_________
+		Funcao:_________
+		Data de admissao:_________
+		Login:_________
+		Senha:_________
+		Botão(salvar)
+	
+	Tela cadastrar clientes
+		CPF:_________
+		RG:_________
+		Nome:_________
+		Telefone Fixo:_________
+		Celular:_________
+		Endereço:_________
+		Distancia:_________
+		Email:_________
+		Data de Nascimento:_________
+		Data do primeiro pedido:_________
+		Sexo:_________
+		Botão(salvar)
+	
+	Tela cadastrar produto
+		Nome:_________
+		Tipo:_________
+		Preço:_________
+		Botão(salvar)
+	
+	Tela cadastrar pedido
+		Data:_________
+		Texto:_________
+		botao(pesquisar cliente por nome)
+		botao(pesquisar cliente por telefone)
+		botao(pesquisar cliente por endereco)
+		botao(pesquisar produto por palavra)
+		Especificacao
+		Valor
+		Forma de Pagamento
+		Troco previsto
+		id do funcionario
+		botao(salvar)
