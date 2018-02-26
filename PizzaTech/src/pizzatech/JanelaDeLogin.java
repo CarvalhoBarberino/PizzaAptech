@@ -11,29 +11,30 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 public class JanelaDeLogin extends JFrame{
-    public JanelaDeLogin(){
-        setTitle("Login"); setLocation(150, 150); setSize(280, 130); setResizable(true); setVisible(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
-        JLabel lNomeDoUsuario = new JLabel("Nome do usuário: ");   add(lNomeDoUsuario);
-        JTextField tNomeDoUsuario = new JTextField(10);            add(tNomeDoUsuario);        
-        JLabel lSenhaDoUsuario = new JLabel("Senha do usuário: "); add(lSenhaDoUsuario);
-        JPasswordField tSenhaDoUsuario = new JPasswordField(10);   add(tSenhaDoUsuario);
-        JButton bEntrar = new JButton("Entrar");                   add(bEntrar);
-        bEntrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                boolean senhaCorreta = Dao.conferirSenha(tNomeDoUsuario.getText(), String.valueOf(tSenhaDoUsuario.getPassword()));
-                if(!senhaCorreta){
-                    JOptionPane.showMessageDialog(null, "Senha incorreta");
-                    tNomeDoUsuario.setText("");
-                    tSenhaDoUsuario.setText("");
-                }
-                if(senhaCorreta){
-                    new JanelaDeOpcoes();
-                    dispose();
-                }
-            }
-        });
-        
-        
-    }
+	public JanelaDeLogin(){
+		setTitle("Login"); setLocation(150, 150); setSize(280, 130); setResizable(false); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
+		JLabel lNomeDoUsuario = new JLabel("Nome do usuário: ");   getContentPane().add(lNomeDoUsuario);
+		JTextField tNomeDoUsuario = new JTextField(10);            getContentPane().add(tNomeDoUsuario);        
+		JLabel lSenhaDoUsuario = new JLabel("Senha do usuário: "); getContentPane().add(lSenhaDoUsuario);
+		JPasswordField tSenhaDoUsuario = new JPasswordField(10);   getContentPane().add(tSenhaDoUsuario);
+		JButton bEntrar = new JButton("Entrar");                   getContentPane().add(bEntrar);
+		setVisible(true); 
+		bEntrar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				boolean senhaCorreta = Dao.conferirSenha(tNomeDoUsuario.getText(), String.valueOf(tSenhaDoUsuario.getPassword()));
+				if(!senhaCorreta){
+					JOptionPane.showMessageDialog(null, "Senha incorreta");
+					tNomeDoUsuario.setText("");
+					tSenhaDoUsuario.setText("");
+				}
+				if(senhaCorreta){
+					new JanelaDeOpcoes();
+					dispose();
+				}
+			}
+		});
+		
+		
+	}
 }
