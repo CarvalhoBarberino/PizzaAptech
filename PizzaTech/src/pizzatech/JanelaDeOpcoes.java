@@ -19,9 +19,31 @@ public class JanelaDeOpcoes extends JFrame{
             }
         });
         
-        JButton bCadastrarCliente = new JButton("Cadastrar cliente"); add(bCadastrarCliente);
-        JButton bCadastrarProduto = new JButton("Cadastrar produto"); add(bCadastrarProduto);
-        JButton bCadastrarPedido = new JButton("Cadastrar pedido"); add(bCadastrarPedido);
+        JButton bCadastrarCliente = new JButton("Cadastrar cliente"); add(bCadastrarCliente); bCadastrarCliente.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new JanelaCadastrarCliente();
+				dispose();
+				
+			}
+		});
+        JButton bCadastrarProduto = new JButton("Cadastrar produto"); add(bCadastrarProduto); bCadastrarProduto.addActionListener(new ActionListener() {
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new JanelaCadastrarProduto();
+				dispose();
+			}
+		});
+        JButton bCadastrarPedido = new JButton("Cadastrar pedido"); add(bCadastrarPedido); bCadastrarPedido.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new JanelaCadastrarPedido();
+				dispose();
+			}
+		});
         JButton bBalanco = new JButton("Consultar Balanço"); add(bBalanco);
         
         JButton bDeslogar = new JButton("Deslogar"); add(bDeslogar); bDeslogar.addActionListener(new ActionListener() {
