@@ -18,12 +18,12 @@ public class JanelaCadastrarPedido extends JFrame{
 		JTextField t;
 	}
 	public JanelaCadastrarPedido(){
-		setTitle("Janela de Opcoes"); setLocation(180, 180); setSize(380, 130); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
-		JPanel p1 = new JPanel(); p1.setLayout(new GridLayout(3, 2));
-		String[] nomeDoLabel = {"Nome:", "Tipo:", "Preço:"};
+		setTitle("Janela de Opcoes"); setLocation(180, 180); setSize(380, 330); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
+		JPanel p1 = new JPanel(); p1.setLayout(new GridLayout(6, 2));
+		String[] nomeDoLabel = {"Id do cliente:", "Especificação:", "Valor", "Forma de pagamento:", "Troco previsto:", "Id do funcionario:"};
 		
 		ArrayList<Linha> vL = new ArrayList<Linha>();
-		for(int i = 0; i < 3; i++){
+		for(int i = 0; i < 6; i++){
 			vL.add(new Linha());
 			vL.get(i).l = new JLabel(nomeDoLabel[i]);
 			p1.add(vL.get(i).l);
@@ -41,7 +41,7 @@ public class JanelaCadastrarPedido extends JFrame{
 					System.out.println(informacoes[i]);
 					vL.get(i).t.setText("");
 				}
-				Dao.salvarCadastroDeProduto(informacoes);
+				Dao.salvarCadastroDePedido(informacoes);
 				new JanelaDeOpcoes();
 				dispose();
 			}
@@ -49,15 +49,7 @@ public class JanelaCadastrarPedido extends JFrame{
 		add(bSalvar);
 		setVisible(true);
 		/*
-		Cadastro de pedidos
-	id
-	Data
-	idCliente
-	Especificacao
-	Valor
-	Forma de Pagamento
-	Troco previsto
-	id do funcionario
+		
 		*/
 	}
 }
