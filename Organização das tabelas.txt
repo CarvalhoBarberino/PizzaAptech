@@ -1,4 +1,4 @@
-CREATE SCHEMA `PizzaTech` ;
+CREATE SCHEMA `pizzatech` ;
 
 Tabela Cadastro de funcionarios
 	id
