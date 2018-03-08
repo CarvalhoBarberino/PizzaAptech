@@ -4,87 +4,59 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.objects.NativeError;
+
+import javax.swing.JOptionPane;
 
 public class Dao {
+	static final String usuario = "root";
+	static final String senhaDoBancoDeDados = "bancodedados";
 	public static boolean conferirSenha(String nome, String senha){
-		System.out.println(nome + senha);
-		return true;
+		try{
+			Boolean senhaConfirmada = false;
+			String url = "jdbc:mysql://localhost/pizzatech";
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
+			PreparedStatement pesquisa = conexao.prepareStatement("SELECT login, senha FROM pizzatech.funcionarios WHERE login=\"" + nome + "\";");
+			ResultSet resultado = pesquisa.executeQuery();
+			while(resultado.next()){
+				if(resultado.getString("senha").equals(senha)){
+					senhaConfirmada = true;
+				}
+			}
+			resultado.close();
+			pesquisa.close();
+			conexao.close();
+			return senhaConfirmada;
+		}catch(Exception e){
+			System.out.println("Erro em:\n    Dao.conferirSenha(String nome, String senha)");
+			e.printStackTrace();
+			return false;
+		}
 	}
 	public static void salvarCadastroDeFuncionario(String[] informacoesArg){
-		if(informacoesArg[11].equals(informacoesArg[12])){
-			informacoesArg[11] = informacoesArg[10];
-			System.out.println("salvarCadastroDeFuncionario(String[] informacoesArg");
-			Date atual = new Date();
-			DateFormat dataadmissao = new SimpleDateFormat("DD/mm/yy");
-			informacoesArg[10] = dataadmissao.format(atual);
-			try{
+		try{
+			if(informacoesArg[11].equals(informacoesArg[12])){
+				Boolean senhaConfirmada = false;
+				String url = "jdbc:mysql://localhost/pizzatech";
 				Class.forName("com.mysql.jdbc.Driver");
-			}catch(Exception e){
-				e.printStackTrace();System.exit(1);
-			}
-
-
-			String esquema = "pizzatech";
-			String usuario = "root";
-			String senha = "bancodedados";
-			String local = "jdbc:Mysql://localhost/" + esquema;
-
-			Connection conexao = null;
-			PreparedStatement stmt = null;
-			ResultSet rs = null;
-			try{
-				conexao = DriverManager.getConnection(local, usuario, senha);
-			}catch(Exception e){System.out.println("NÃO Conectou com o banco de dados");e.printStackTrace();System.exit(1);}		
-			System.out.println("Conectou com o banco de dados");
-
-			//3 Criando query
-			String query = "INSERT INTO `pizzatech`.`funcionarios` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `email`, `datanascimento`, `sexo`, `funcao`, `dataadmissao`, `login`, `senha`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
-			//4 configurando Query
-			try{
-				stmt = conexao.prepareStatement(query);
-			}catch(Exception e){e.printStackTrace();System.exit(1);}
-			try{
-				stmt.setInt(1, Integer.valueOf(informacoesArg[0])); //cpf
-				stmt.setInt(2, Integer.valueOf(informacoesArg[1])); //rg
-				stmt.setString(3, informacoesArg[2]); //nome
-				stmt.setInt(4, Integer.valueOf(informacoesArg[3])); //telefonefixo
-				stmt.setInt(5, Integer.valueOf(informacoesArg[4])); //celular
-				stmt.setString(6, informacoesArg[5]); //endereco
-				stmt.setString(7, informacoesArg[6]); //email
-				stmt.setString(8, informacoesArg[7]); //datadenascimento
-				stmt.setString(9, informacoesArg[8]); //sexo
-				stmt.setString(10, informacoesArg[9]); //funcao
-				stmt.setString(11, informacoesArg[10]); //dataadmissao
-				stmt.setString(12, informacoesArg[11]); //login
-				stmt.setString(13, informacoesArg[12]); //senha
-			}catch(Exception e){System.out.println("stmt.set...(int, ...)");e.printStackTrace();System.exit(1);}
-
-
-			try {
-				//5 Executar a query
-				stmt.execute();
-			}catch(Exception e){System.out.println("NÃO Cadastrou o aluno com sucesso");e.printStackTrace();System.exit(1);}
-			System.out.println("Cadastrou o aluno com sucesso");
-
-			try {
-				//6 Fechar o banco de dados
-				stmt.close();
-			}catch(Exception e){System.out.println("NÃO Fechou o banco de dados");e.printStackTrace();System.exit(1);}
-			try {
+				Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
+				//String[] nomeDoLabel = {"CPF:", "RG:", "Nome:", "Telefone fixo:", "Celular:", "Endereço:", "Email:", 
+				//"Data de nascimento:", "Sexo:", "Função:", "Login:", "Senha:", "Confirmar Senha:"};
+				PreparedStatement pesquisa = conexao.prepareStatement("INSERT INTO `pizzatech`.`funcionarios` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `email`, `datanascimento`, `sexo`, `funcao`, `dataadmissao`, `login`, `senha`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "', '" + informacoesArg[3] + "', '" + informacoesArg[4] + "', '" + informacoesArg[5] + "', '" + informacoesArg[6] + "', '" + informacoesArg[7] + "', '" + informacoesArg[8] + "', '" + informacoesArg[9] + "', '" + new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "', '" + informacoesArg[10] + "', '" + informacoesArg[11] + "');");
+				pesquisa.execute();
+				pesquisa.close();
 				conexao.close();
-			}catch(Exception e){System.out.println("NÃO Fechou a conexção com o banco de dados");e.printStackTrace();System.exit(1);}
-			System.out.println("Fechou o banco de dados");
-		}
-		else{
-			//O que fazer se as senhas não conferirem
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "A senha não esta igual nos dois campos.");
+			}
+			
+		}catch(Exception e){
+			System.out.println("Erro em:\n    Dao.salvarCadastroDeFuncionario(String[] informacoesArg)");
+			e.printStackTrace();
 		}
 	}
 	public static void salvarCadastroDeCliente(String[] informacoesArg){
@@ -92,8 +64,5 @@ public class Dao {
 	}
 	public static void salvarCadastroDeProduto(String[] informacoesArg){
 		System.out.println("Salvando informacoes dos produto");
-	}
-	public static void salvarCadastroDePedido(String[] informacoesArg){
-		System.out.println("Salvando informacoes dos pedidos");
 	}
 }
