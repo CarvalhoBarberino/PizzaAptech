@@ -114,11 +114,11 @@ INSERT INTO `pizzatech`.`funcionarios` (`id`, `cpf`, `rg`, `nome`, `telefonefixo
 ---------------------------------------------------------------------------------------------------------
 INSERT INTO `pizzatech`.`funcionarios` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `email`, `datanascimento`, `sexo`, `funcao`, `dataadmissao`, `login`, `senha`) VALUES ('356487512', '356569884', 'Juliana Clemente', '45688874', '955886487', 'Rua dos dromedários, 21 - Osasco - SP', 'julicle@gmail.com', '10/04/88', 'Feminino', 'Gerente geral', '01/01/16', 'SuperVisora', 'MeuIME');
 ---------------------------------------------------------------------------------------------------------
-335487951
-325548879
+335.365.549-77
+32.554.887-9
 Rafael Castilho Braga
-45687459
-996487441
++55-11-4156-1313
+9-9648-7441
 Rua das Piranhas Sexy, 581 - São Bernardo do Campo - SP
 rafaelisnotvirgin@gmail.com
 14/07/92
