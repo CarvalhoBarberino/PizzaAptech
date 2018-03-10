@@ -35,7 +35,7 @@ public class JanelaCadastrarProduto extends JFrame{
 		JButton bSalvar = new JButton("Salvar"); bSalvar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String[] informacoes = new String[13];
+				String[] informacoes = new String[3];
 				for(int i = 0; i < 3; i++){
 					informacoes[i] = vL.get(i).t.getText();
 					System.out.println(informacoes[i]);

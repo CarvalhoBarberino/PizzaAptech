@@ -18,7 +18,7 @@ public class JanelaCadastrarCliente extends JFrame{
 		JTextField t;
 	}
 	public JanelaCadastrarCliente(){
-		setTitle("Janela de Opcoes"); setLocation(180, 180); setSize(380, 260); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
+		setTitle("Cadastrar Cliente"); setLocation(180, 180); setSize(380, 260); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
 		JPanel p1 = new JPanel(); p1.setLayout(new GridLayout(10, 2));
 		String[] nomeDoLabel = {"CPF:", "RG:", "Nome:", "Telefone fixo:", "Celular:", "Endereço:", "Distancia", "Email:", "Data de nascimento:", "Sexo:"};
 		
@@ -35,7 +35,7 @@ public class JanelaCadastrarCliente extends JFrame{
 		JButton bSalvar = new JButton("Salvar"); bSalvar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String[] informacoes = new String[13];
+				String[] informacoes = new String[10];
 				for(int i = 0; i < 10; i++){
 					informacoes[i] = vL.get(i).t.getText();
 					System.out.println(informacoes[i]);

@@ -38,29 +38,54 @@ public class Dao {
 	}
 	public static void salvarCadastroDeFuncionario(String[] informacoesArg){
 		try{
-			if(informacoesArg[11].equals(informacoesArg[12])){
-				Boolean senhaConfirmada = false;
+			Boolean todosCamposPreenchidos = true;
+			for(int i = 0; i < 13 ; i++){
+				if(informacoesArg[i].equals("")){
+					todosCamposPreenchidos = false;
+				}
+			}
+			if(informacoesArg[11].equals(informacoesArg[12]) && todosCamposPreenchidos){
 				String url = "jdbc:mysql://localhost/pizzatech";
 				Class.forName("com.mysql.jdbc.Driver");
 				Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
-				//String[] nomeDoLabel = {"CPF:", "RG:", "Nome:", "Telefone fixo:", "Celular:", "Endereço:", "Email:", 
-				//"Data de nascimento:", "Sexo:", "Função:", "Login:", "Senha:", "Confirmar Senha:"};
 				PreparedStatement pesquisa = conexao.prepareStatement("INSERT INTO `pizzatech`.`funcionarios` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `email`, `datanascimento`, `sexo`, `funcao`, `dataadmissao`, `login`, `senha`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "', '" + informacoesArg[3] + "', '" + informacoesArg[4] + "', '" + informacoesArg[5] + "', '" + informacoesArg[6] + "', '" + informacoesArg[7] + "', '" + informacoesArg[8] + "', '" + informacoesArg[9] + "', '" + new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "', '" + informacoesArg[10] + "', '" + informacoesArg[11] + "');");
 				pesquisa.execute();
 				pesquisa.close();
 				conexao.close();
 			}
 			else{
-				JOptionPane.showMessageDialog(null, "A senha não esta igual nos dois campos.");
+				JOptionPane.showMessageDialog(null, "1) Todos os campos devem estar preenchidos.\n2) A senha deve ser igual nos dois campos.");
 			}
-			
 		}catch(Exception e){
 			System.out.println("Erro em:\n    Dao.salvarCadastroDeFuncionario(String[] informacoesArg)");
 			e.printStackTrace();
 		}
 	}
 	public static void salvarCadastroDeCliente(String[] informacoesArg){
-		System.out.println("Salvando informacoes dos clientes");
+		try{
+			Boolean todosCamposPreenchidos = true;
+			for(int i = 0; i < 10 ; i++){
+				if(informacoesArg[i].equals("")){
+					todosCamposPreenchidos = false;
+				}
+			}
+			if(todosCamposPreenchidos){
+				String url = "jdbc:mysql://localhost/pizzatech";
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
+				//String[] nomeDoLabel = {"CPF:", "RG:", "Nome:", "Telefone fixo:", "Celular:", "Endereço:", "Distancia", "Email:", "Data de nascimento:", "Sexo:"};
+				PreparedStatement pesquisa = conexao.prepareStatement("INSERT INTO `pizzatech`.`clientes` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `distanciametros`, `email`, `datanascimento`, `sexo` ,`datadoprimeiropedido`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "', '" + informacoesArg[3] + "', '" + informacoesArg[4] + "', '" + informacoesArg[5] + "', '" + informacoesArg[6] + "', '" + informacoesArg[7] + "', '" + informacoesArg[8] + "', '" + informacoesArg[9] + "', '" + new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "');");
+				pesquisa.execute();
+				pesquisa.close();
+				conexao.close();
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "1) Todos os campos devem estar preenchidos.");
+			}
+		}catch(Exception e){
+			System.out.println("Erro em:\n    salvarCadastroDeCliente(String[] informacoesArg)");
+			e.printStackTrace();
+		}
 	}
 	public static void salvarCadastroDeProduto(String[] informacoesArg){
 		System.out.println("Salvando informacoes dos produto");
