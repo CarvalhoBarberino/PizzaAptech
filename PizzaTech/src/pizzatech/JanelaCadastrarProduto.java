@@ -18,7 +18,7 @@ public class JanelaCadastrarProduto extends JFrame{
 		JTextField t;
 	}
 	public JanelaCadastrarProduto(){
-		setTitle("Janela de Opcoes"); setLocation(180, 180); setSize(380, 130); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
+		setTitle("Cadastrar Produtos"); setLocation(180, 180); setSize(380, 130); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
 		JPanel p1 = new JPanel(); p1.setLayout(new GridLayout(3, 2));
 		String[] nomeDoLabel = {"Nome:", "Tipo:", "Preço:"};
 		

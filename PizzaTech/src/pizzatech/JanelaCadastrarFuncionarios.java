@@ -38,11 +38,11 @@ public class JanelaCadastrarFuncionarios extends JFrame{
 				for(int i = 0; i < 13; i++){
 					informacoes[i] = vL.get(i).t.getText();
 					System.out.println(informacoes[i]);
-					vL.get(i).t.setText("");
 				}
-				Dao.salvarCadastroDeFuncionario(informacoes);
-				new JanelaDeOpcoes();
-				dispose();
+				if(Dao.salvarCadastroDeFuncionario(informacoes)){
+					new JanelaDeOpcoes();
+					dispose();
+				}
 			}
 		});
 		add(bSalvar);
