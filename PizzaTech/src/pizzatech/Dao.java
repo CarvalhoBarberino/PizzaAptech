@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -119,15 +120,22 @@ public class Dao {
 			e.printStackTrace();
 		}
 	}
-	public static void consultarProduto(String segmentoDeNome){
+	public static ArrayList<Produto> consultarProduto(String segmentoDeNome){
+		ArrayList<Produto> vecProduto = new ArrayList<Produto>();
 		try{
+			
 			String url = "jdbc:mysql://localhost/pizzatech";
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
 			PreparedStatement pesquisa = conexao.prepareStatement("SELECT nome, tipo, preco, id FROM pizzatech.produtos WHERE nome LIKE '%" + segmentoDeNome + "%';");
 			ResultSet resultado = pesquisa.executeQuery();
 			while(resultado.next()){
-				System.out.println(resultado.getString("id") + " | " + resultado.getString("nome") + " | " + resultado.getString("tipo") + " | " + resultado.getString("preco"));
+				Produto x = new Produto();
+				x.id = resultado.getInt("id");
+				x.nome = resultado.getString("nome");
+				x.tipo = resultado.getString("tipo");
+				x.preco = (float) resultado.getFloat("preco");
+				vecProduto.add(x);
 			}
 			resultado.close();
 			pesquisa.close();
@@ -136,5 +144,15 @@ public class Dao {
 			System.out.println("Erro em:\n    consultarProduto(String segmentoDeNome)");
 			e.printStackTrace();
 		}
+		return vecProduto;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

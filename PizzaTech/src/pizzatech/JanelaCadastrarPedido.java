@@ -1,15 +1,20 @@
 package pizzatech;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class JanelaCadastrarPedido extends JFrame{
@@ -17,48 +22,35 @@ public class JanelaCadastrarPedido extends JFrame{
 		JLabel l;
 		JTextField t;
 	}
+	ArrayList<Produto> vecProdutoOpcoes;
 	public JanelaCadastrarPedido(){
-		setTitle("Cadastrar Pedidos"); setLocation(180, 180); setSize(380, 130); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());
-		JPanel p1 = new JPanel(); p1.setLayout(new GridLayout(3, 2));
-		String[] nomeDoLabel = {"Nome:", "Tipo:", "Preço:"};
-		
-		ArrayList<Linha> vL = new ArrayList<Linha>();
-		for(int i = 0; i < 3; i++){
-			vL.add(new Linha());
-			vL.get(i).l = new JLabel(nomeDoLabel[i]);
-			p1.add(vL.get(i).l);
-			vL.get(i).t = new JTextField(15);
-			p1.add(vL.get(i).t);
-		}
-		p1.setBounds(50, 50, 200, 100);
-		add(p1);
-		JButton bSalvar = new JButton("Salvar"); bSalvar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String[] informacoes = new String[13];
-				for(int i = 0; i < 3; i++){
-					informacoes[i] = vL.get(i).t.getText();
-					System.out.println(informacoes[i]);
-					vL.get(i).t.setText("");
+		setTitle("Cadastrar Pedidos"); setLocation(180, 180); setSize(650, 400); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());setVisible(true);
+		int selecionado = 0;
+		JTextField tBuscar = new JTextField(50);
+		JButton bBuscar = new JButton("Buscar");
+		JButton bAdicionar = new JButton("Adicionar");
+		DefaultListModel modelo1 = new DefaultListModel();
+		JList lista1 = new JList(modelo1);
+		JScrollPane rolagem1 = new JScrollPane(lista1);
+		getContentPane().add(tBuscar);
+		getContentPane().add(bBuscar);
+		rolagem1.setPreferredSize(new Dimension(600, 150));
+		getContentPane().add(rolagem1);
+		getContentPane().add(bAdicionar);
+		bBuscar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				modelo1.clear();
+				vecProdutoOpcoes = Dao.consultarProduto(tBuscar.getText().equals("")?"NULO":tBuscar.getText());
+				for(int i = 0; i < vecProdutoOpcoes.size(); i++){
+					modelo1.addElement(vecProdutoOpcoes.get(i).nome + "	|	R$" + vecProdutoOpcoes.get(i).preco);
 				}
-				Dao.salvarCadastroDeProduto(informacoes);
-				new JanelaDeOpcoes();
-				dispose();
 			}
 		});
-		add(bSalvar);
-		setVisible(true);
-		/*
-		Cadastro de pedidos
-	id
-	Data
-	idCliente
-	Especificacao
-	Valor
-	Forma de Pagamento
-	Troco previsto
-	id do funcionario
-		*/
+		bAdicionar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				//continuar aqui
+			}
+		});
 	}
 }
 
