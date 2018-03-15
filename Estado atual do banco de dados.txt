@@ -68,3 +68,5 @@ INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Calabresa 
 INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Coca Cola 2 litros', 'refrigerante', '5');
 INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Guarana Antartica 2 Litros', 'refrigerante', '4.5');
 
+
+INSERT INTO `pizzatech`.`pedidos` (`id`, `data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('0', '14/03/2018', '1', 'bla bla bla', '13', 'Denheiro', '11', '1');

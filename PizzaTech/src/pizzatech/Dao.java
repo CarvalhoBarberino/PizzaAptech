@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 public class Dao {
 	static final String usuario = "root";
-	static final String senhaDoBancoDeDados = "bancodedados";
+	static final String senhaDoBancoDeDados = "dadossentados";
 	public static boolean conferirSenha(String nome, String senha){
 		try{
 			Boolean senhaConfirmada = false;
@@ -78,7 +78,6 @@ public class Dao {
 				String url = "jdbc:mysql://localhost/pizzatech";
 				Class.forName("com.mysql.jdbc.Driver");
 				Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
-				//String[] nomeDoLabel = {"CPF:", "RG:", "Nome:", "Telefone fixo:", "Celular:", "Endereço:", "Distancia", "Email:", "Data de nascimento:", "Sexo:"};
 				PreparedStatement pesquisa = conexao.prepareStatement("INSERT INTO `pizzatech`.`clientes` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `distanciametros`, `email`, `datanascimento`, `sexo` ,`datadoprimeiropedido`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "', '" + informacoesArg[3] + "', '" + informacoesArg[4] + "', '" + informacoesArg[5] + "', '" + informacoesArg[6] + "', '" + informacoesArg[7] + "', '" + informacoesArg[8] + "', '" + informacoesArg[9] + "', '" + new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "');");
 				System.out.println("INSERT INTO `pizzatech`.`clientes` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `distanciametros`, `email`, `datanascimento`, `sexo` ,`datadoprimeiropedido`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "', '" + informacoesArg[3] + "', '" + informacoesArg[4] + "', '" + informacoesArg[5] + "', '" + informacoesArg[6] + "', '" + informacoesArg[7] + "', '" + informacoesArg[8] + "', '" + informacoesArg[9] + "', '" + new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "');");
 				pesquisa.execute();
@@ -146,7 +145,18 @@ public class Dao {
 		}
 		return vecProduto;
 	}
-	
+	public static void fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente){
+		try{
+			String url = "jdbc:mysql://localhost/pizzatech";
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
+			String comandoSql = continuar aqui "INSERT INTO `pizzatech`.`pedidos` (`data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('14/03/2018', '1', 'bla bla bla', '13', 'Denheiro', '11', '1');";
+			PreparedStatement pesquisa = conexao.prepareStatement(comandoSql);
+			
+		}catch(Exception err){
+			
+		}
+	}
 	
 	
 	
