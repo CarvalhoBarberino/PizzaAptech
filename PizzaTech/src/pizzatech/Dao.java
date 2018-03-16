@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import javax.swing.JOptionPane;
 
 public class Dao {
 	static final String usuario = "root";
-	static final String senhaDoBancoDeDados = "dadossentados";
+	static final String senhaDoBancoDeDados = "bancodedados";
 	public static boolean conferirSenha(String nome, String senha){
 		try{
 			Boolean senhaConfirmada = false;
@@ -145,19 +146,65 @@ public class Dao {
 		}
 		return vecProduto;
 	}
-	public static void fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente){
+	public static void fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente, int idFuncionario, int formaDePagamento, float trocoPrevisto){
+		try{
+			String especificacao = "";
+			float preco = 0;
+			int[] vecQuant = new int[vecProduto.size()];
+			for(int i1 = 0; i1 < vecProduto.size(); i1++){
+				for(int i2 = i1 + 1; i2 < vecProduto.size(); i2++){
+					if(vecProduto.get(i1).id == vecProduto.get(i2).id){
+						vecQuant[i1]++;
+						vecProduto.remove(i2);
+					}
+				}
+			}
+			for(int i = 0; i < vecProduto.size(); i++){
+				especificacao = especificacao + "|" + vecQuant[i] + "|" + vecProduto.get(i).tipo + "|" + vecProduto.get(i).nome + "\n";
+				preco = preco + vecQuant[i] * vecProduto.get(i).preco;
+			}
+			
+			String url = "jdbc:mysql://localhost/pizzatech";
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
+			String comandoSql = "INSERT INTO `pizzatech`.`pedidos` (`data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('" + new Date() + "', '" + idDoCliente + "', '" + especificacao + "', '" + preco + "', '" + formaDePagamento + "', '" + trocoPrevisto + "', '" + idFuncionario + "');";
+			PreparedStatement pesquisa = conexao.prepareStatement(comandoSql);
+			pesquisa.execute();
+			pesquisa.close();
+			conexao.close();
+		}catch(Exception err){
+			System.out.println("Erro em:\n    fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente, int idFuncionario, int formaDePagamento, float trocoPrevisto)");
+			err.printStackTrace();
+		}
+	}
+	public static String[] consultarCliente(String segmentoNome){
+		String[] vecString = null;
+		int i = 0;
+		String sql = "SELECT nome, telefonefixo, celular, endereco, id FROM pizzatech.clientes WHERE nome LIKE '%" + segmentoNome + "%';";
 		try{
 			String url = "jdbc:mysql://localhost/pizzatech";
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
-			String comandoSql = continuar aqui "INSERT INTO `pizzatech`.`pedidos` (`data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('14/03/2018', '1', 'bla bla bla', '13', 'Denheiro', '11', '1');";
-			PreparedStatement pesquisa = conexao.prepareStatement(comandoSql);
-			
+			PreparedStatement pesquisa = conexao.prepareStatement(sql);
+			ResultSet resultado = pesquisa.executeQuery();
+			resultado.last();
+			vecString = new String[resultado.getRow()];
+			resultado.beforeFirst();
+			while(resultado.next()){
+				vecString[i] = resultado.getString(5) + " ; " + resultado.getString(1) + " | " + resultado.getString(2) + " | " + resultado.getString(3) + " | " + resultado.getString(4);
+				System.out.println("Dao " + vecString[i]);
+				i++;
+			}
+			resultado.close();
+			pesquisa.close();
+			conexao.close();
+			return vecString;
 		}catch(Exception err){
-			
+			System.out.println("Erro em:\n    consultarCliente(String segmentoNome)");
+			err.printStackTrace();
 		}
+		return vecString;
 	}
-	
 	
 	
 	
