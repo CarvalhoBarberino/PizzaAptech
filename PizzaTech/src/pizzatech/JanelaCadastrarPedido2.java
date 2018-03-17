@@ -56,10 +56,12 @@ public class JanelaCadastrarPedido2 extends JFrame{
 		bFecharPedido.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				float trocoPrevisto = 0;
-				if(!((vecProdutoAdicionado.size() < 0) || (formaDePagamento.equals("Dinheiro") && tTrocoPara.equals("0")))){
+				if(!((vecProdutoAdicionado.size() < 0) || (formaDePagamento.equals("Dinheiro") && (Integer.valueOf(tTrocoPara.getText()) < total) ))){
 					try{
-						trocoPrevisto = Integer.valueOf(tTrocoPara.getText()) - total;
+						trocoPrevisto = formaDePagamento.equals("Dinheiro") ? Integer.valueOf(tTrocoPara.getText()) - total : 0;
 						Dao.fecharPedido(vecProdutoAdicionado, idDoCliente, Dao.idFuncionario, formaDePagamento, trocoPrevisto);
+						new JanelaDeOpcoes();
+						dispose();
 					}catch(Exception err){
 						JOptionPane.showMessageDialog(null, "Preencha corretamente o campo \"Troco para\"");
 					}

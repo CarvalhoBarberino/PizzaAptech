@@ -7,8 +7,10 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JFrame;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 public class Dao {
 	static final String usuario = "root";
@@ -123,7 +125,6 @@ public class Dao {
 	public static ArrayList<Produto> consultarProduto(String segmentoDeNome){
 		ArrayList<Produto> vecProduto = new ArrayList<Produto>();
 		try{
-			
 			String url = "jdbc:mysql://localhost/pizzatech";
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
@@ -160,17 +161,18 @@ public class Dao {
 			for(int i = 0; i < vecProduto.size(); i++){//Este laco é importante pois cada elemento precisa inicializar com quantidade = 1
 				vecQuant[i] = 1;
 			}
-			for(int i1 = 0; i1 < vecProduto.size(); i1++){//Unir produtor iguais
-				for(int i2 = i1 + 1; i2 < vecProduto.size(); i2++){
-					if(vecProduto.get(i1).id == vecProduto.get(i2).id){
-						vecQuant[i1]++;
-						vecProduto.remove(i2);
+			for(int cursorEsquerda = 0; cursorEsquerda < vecProduto.size(); cursorEsquerda++){//Unir produtor iguais
+				for(int cursorDireita = cursorEsquerda + 1; cursorDireita < vecProduto.size(); cursorDireita++){
+					if(vecProduto.get(cursorEsquerda).id == vecProduto.get(cursorDireita).id){
+						vecQuant[cursorEsquerda]++;
+						vecProduto.remove(cursorDireita);
+						cursorDireita--;
 					}
 				}
 			}
 			for(int i = 0; i < vecProduto.size(); i++){
 				int upDateSequencia = 0;
-				especificacao = especificacao + "|" + vecQuant[i] + "|" + vecProduto.get(i).tipo + "|" + vecProduto.get(i).nome + "\n";
+				especificacao = especificacao + " | " + vecQuant[i] + " | " + vecProduto.get(i).tipo + " | " + vecProduto.get(i).nome + "\n";
 				preco = preco + vecQuant[i] * vecProduto.get(i).preco;
 				comandoSql = "SELECT id, sequencia FROM pizzatech.produtos WHERE id='" + vecProduto.get(i).id + "';";
 				pesquisa = conexao.prepareStatement(comandoSql);
@@ -186,10 +188,12 @@ public class Dao {
 			}
 			comandoSql = "INSERT INTO `pizzatech`.`pedidos` (`data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('" + new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "', '" + idDoCliente + "', '" + especificacao + "', '" + preco + "', '" + formaDePagamento + "', '" + trocoPrevisto + "', '" + idFuncionario + "');";
 			System.out.println(comandoSql);
+			imprimirPedido(idDoCliente, idFuncionario, especificacao, formaDePagamento, trocoPrevisto, preco);
 			pesquisa = conexao.prepareStatement(comandoSql);
 			pesquisa.execute();
 			pesquisa.close();
 			conexao.close();
+			
 		}catch(Exception err){
 			System.out.println("Erro em:\n    fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente, int idFuncionario, int formaDePagamento, float trocoPrevisto)");
 			err.printStackTrace();
@@ -223,7 +227,34 @@ public class Dao {
 		}
 		return vecString;
 	}
-	
+	public static void imprimirPedido(int idDoCliente, int idFuncionario, String especificacao, String formaDePagamento, float trocoPrevisto, float preco){
+		String imprimir = "";
+		try{
+			String url = "jdbc:mysql://localhost/pizzatech";
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
+			PreparedStatement pesquisa = conexao.prepareStatement("SELECT nome, telefonefixo, celular, endereco id FROM pizzatech.clientes WHERE id='" + idDoCliente + "';");
+			ResultSet resultado = pesquisa.executeQuery();
+			while(resultado.next()){
+				//+ "\nENDERECO: " + resultado.getString("endereco") 
+				imprimir = "CLIENTE: " + resultado.getString("nome") + "\nTELEFONES: " + resultado.getString("telefonefixo") + "    " + resultado.getString("celular") + "\n----------------\n\n";
+				imprimir = imprimir + "\nENDERECO: " + resultado.getString("nome") + "\n";
+			}
+			imprimir = imprimir + "ESPECIFICAÇÃO:\n" + especificacao + "\n----------------\n\n" + "FORMA DE PAGAMENTO: " + formaDePagamento + "\nTROCO PREVISTO: " + trocoPrevisto + "\nPRECO TOTAL: " + preco;
+			resultado.close();
+			pesquisa.close();
+			conexao.close();
+			JFrame jImprimirPedido = new JFrame("Imprimir pedido");
+			jImprimirPedido.setBounds(200, 200, 600, 600); jImprimirPedido.setVisible(true);
+			JTextArea tArea = new JTextArea();
+			tArea.setSize(500, 400); tArea.setText(imprimir);
+			jImprimirPedido.add(tArea);
+			
+		}catch(Exception e){
+			System.out.println("Erro em:\n    imprimirPedido(int idDoCliente, int idFuncionario, String especificacao, String formaDePagamento, float trocoPrevisto)");
+			e.printStackTrace();
+		}
+	}
 	
 	
 	
