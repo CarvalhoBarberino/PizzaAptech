@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,27 +13,29 @@ import javax.swing.JOptionPane;
 public class Dao {
 	static final String usuario = "root";
 	static final String senhaDoBancoDeDados = "bancodedados";
-	public static boolean conferirSenha(String nome, String senha){
+	public static int idFuncionario = 0;
+	public static int conferirSenha(String nome, String senha){
 		try{
-			Boolean senhaConfirmada = false;
+			idFuncionario = -1;
 			String url = "jdbc:mysql://localhost/pizzatech";
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
-			PreparedStatement pesquisa = conexao.prepareStatement("SELECT login, senha FROM pizzatech.funcionarios WHERE login=\"" + nome + "\";");
+			PreparedStatement pesquisa = conexao.prepareStatement("SELECT id, login, senha FROM pizzatech.funcionarios WHERE login=\"" + nome + "\";");
 			ResultSet resultado = pesquisa.executeQuery();
 			while(resultado.next()){
 				if(resultado.getString("senha").equals(senha)){
-					senhaConfirmada = true;
+					idFuncionario = resultado.getInt("id");
+					System.out.println("id do funcionario = " + idFuncionario);
 				}
 			}
 			resultado.close();
 			pesquisa.close();
 			conexao.close();
-			return senhaConfirmada;
+			return idFuncionario;
 		}catch(Exception e){
 			System.out.println("Erro em:\n    Dao.conferirSenha(String nome, String senha)");
 			e.printStackTrace();
-			return false;
+			return -1;
 		}
 	}
 	public static boolean salvarCadastroDeFuncionario(String[] informacoesArg){
@@ -106,8 +106,8 @@ public class Dao {
 				Class.forName("com.mysql.jdbc.Driver");
 				Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
 				//String[] nomeDoLabel = {"Nome:", "Tipo:", "Preço:"};
-				PreparedStatement pesquisa = conexao.prepareStatement("INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "');");
-				System.out.println("INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "');");
+				PreparedStatement pesquisa = conexao.prepareStatement("INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`, `sequencia`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "', '0');");
+				System.out.println("INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`, `sequencia`) VALUES ('" + informacoesArg[0] + "', '" + informacoesArg[1] + "', '" + informacoesArg[2] + "', '0');");
 				pesquisa.execute();
 				pesquisa.close();
 				conexao.close();
@@ -146,12 +146,21 @@ public class Dao {
 		}
 		return vecProduto;
 	}
-	public static void fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente, int idFuncionario, int formaDePagamento, float trocoPrevisto){
+	public static void fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente, int idFuncionario, String formaDePagamento, float trocoPrevisto){
 		try{
+			String comandoSql;
+			String url = "jdbc:mysql://localhost/pizzatech";
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
+			PreparedStatement pesquisa;
+			ResultSet resultado;
 			String especificacao = "";
 			float preco = 0;
 			int[] vecQuant = new int[vecProduto.size()];
-			for(int i1 = 0; i1 < vecProduto.size(); i1++){
+			for(int i = 0; i < vecProduto.size(); i++){//Este laco é importante pois cada elemento precisa inicializar com quantidade = 1
+				vecQuant[i] = 1;
+			}
+			for(int i1 = 0; i1 < vecProduto.size(); i1++){//Unir produtor iguais
 				for(int i2 = i1 + 1; i2 < vecProduto.size(); i2++){
 					if(vecProduto.get(i1).id == vecProduto.get(i2).id){
 						vecQuant[i1]++;
@@ -160,15 +169,24 @@ public class Dao {
 				}
 			}
 			for(int i = 0; i < vecProduto.size(); i++){
+				int upDateSequencia = 0;
 				especificacao = especificacao + "|" + vecQuant[i] + "|" + vecProduto.get(i).tipo + "|" + vecProduto.get(i).nome + "\n";
 				preco = preco + vecQuant[i] * vecProduto.get(i).preco;
+				comandoSql = "SELECT id, sequencia FROM pizzatech.produtos WHERE id='" + vecProduto.get(i).id + "';";
+				pesquisa = conexao.prepareStatement(comandoSql);
+				resultado = pesquisa.executeQuery();
+				while(resultado.next()){
+					upDateSequencia = resultado.getInt("sequencia") + vecQuant[i];
+				}
+				comandoSql = "UPDATE `pizzatech`.`produtos` SET `sequencia`='" + upDateSequencia + "' WHERE `id`='" + vecProduto.get(i).id + "';";
+				System.out.println(comandoSql);
+				pesquisa = conexao.prepareStatement(comandoSql);
+				pesquisa.execute();
+				pesquisa.close();
 			}
-			
-			String url = "jdbc:mysql://localhost/pizzatech";
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
-			String comandoSql = "INSERT INTO `pizzatech`.`pedidos` (`data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('" + new Date() + "', '" + idDoCliente + "', '" + especificacao + "', '" + preco + "', '" + formaDePagamento + "', '" + trocoPrevisto + "', '" + idFuncionario + "');";
-			PreparedStatement pesquisa = conexao.prepareStatement(comandoSql);
+			comandoSql = "INSERT INTO `pizzatech`.`pedidos` (`data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('" + new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "', '" + idDoCliente + "', '" + especificacao + "', '" + preco + "', '" + formaDePagamento + "', '" + trocoPrevisto + "', '" + idFuncionario + "');";
+			System.out.println(comandoSql);
+			pesquisa = conexao.prepareStatement(comandoSql);
 			pesquisa.execute();
 			pesquisa.close();
 			conexao.close();

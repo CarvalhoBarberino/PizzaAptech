@@ -22,13 +22,14 @@ public class JanelaDeLogin extends JFrame{
 		bEntrar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				boolean senhaCorreta = Dao.conferirSenha(tNomeDoUsuario.getText(), String.valueOf(tSenhaDoUsuario.getPassword()));
-				if(!senhaCorreta){
+				int idFuncionario = Dao.conferirSenha(tNomeDoUsuario.getText(), String.valueOf(tSenhaDoUsuario.getPassword()));
+				if(idFuncionario <= 0){
 					JOptionPane.showMessageDialog(null, "Senha incorreta");
 					tNomeDoUsuario.setText("");
 					tSenhaDoUsuario.setText("");
 				}
-				if(senhaCorreta){
+				if(idFuncionario > 0){
+					Dao.idFuncionario = idFuncionario;
 					new JanelaDeOpcoes();
 					dispose();
 				}

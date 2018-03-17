@@ -63,12 +63,26 @@ INSERT INTO `pizzatech`.`funcionarios` (`cpf`, `rg`, `nome`, `telefonefixo`, `ce
 INSERT INTO `pizzatech`.`clientes`     (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `distanciametros`, `email`, `datanascimento`, `sexo`) VALUES ('546874566', '356211348', 'Jorjão Dos Venenos', '44483838', '99465648', 'Rua das mandiocaWhey, 52 - Cajamar - SP', '3500', 'jorjedosvenenos@bangu1.com', '03/04/1981', 'Masculino');
 INSERT INTO `pizzatech`.`clientes` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `distanciametros`, `email`, `datanascimento`, `sexo` ,`datadoprimeiropedido`) VALUES ('75848737623', '878763341', 'Talita mara', '75843988', '985773722', 'Jurere internacional, 578', '500000', 'talitavolts@hotmail.com', '07/08/1990', 'Feminino', '12/03/2018');
 INSERT INTO `pizzatech`.`clientes` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `distanciametros`, `email`, `datanascimento`, `datadoprimeiropedido`, `sexo`) VALUES ('46737488621', '874873649', 'Maria Jose Climação', '87548833', '877477366', 'Rua das dalias, 86', '700', 'mariajosedumdum@gmail.com', '87/09/1999', '04/02/2017', 'Feminino');
+INSERT INTO `pizzatech`.`clientes` (`cpf`, `rg`, `nome`, `telefonefixo`, `celular`, `endereco`, `distanciametros`, `email`, `datanascimento`, `datadoprimeiropedido`) VALUES ('74762636611', '784566637', 'Antonieta Gonsalves Lima', '65774883', '985774632', 'Rua Adamastor matias, 15', '4000', 'antonietavil@hotmail.com', '15/07/1979', '03/07/2015');
+
 
 
 INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Mussarela magra', 'pizza', '27');
 INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Calabresa fina', 'pizza', '21');
 INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Coca Cola 2 litros', 'refrigerante', '5');
 INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Guarana Antartica 2 Litros', 'refrigerante', '4.5');
+INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Aliche com champignhon', 'pizza', '41');
+INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Atum ralado com ervas', 'pizza', '39');
+INSERT INTO `pizzatech`.`produtos` (`nome`, `tipo`, `preco`) VALUES ('Fanta 2 Litros', 'Refrigerente', '4');
 
 
-INSERT INTO `pizzatech`.`pedidos` (`id`, `data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('0', '14/03/2018', '1', 'bla bla bla', '13', 'Denheiro', '11', '1');
+INSERT INTO `pizzatech`.`pedidos` (`id`, `data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('0', '14/03/2018', '1', 'bla bla bla', '13', 'Dinheiro', '11', '1');
+
+UPDATE `pizzatech`.`produtos` SET `sequencia`='0' WHERE `id`='2';
+UPDATE `pizzatech`.`produtos` SET `sequencia`='0' WHERE `id`='1';
+UPDATE `pizzatech`.`produtos` SET `sequencia`='0' WHERE `id`='3';
+UPDATE `pizzatech`.`produtos` SET `sequencia`='0' WHERE `id`='4';
+UPDATE `pizzatech`.`produtos` SET `sequencia`='0' WHERE `id`='5';
+UPDATE `pizzatech`.`produtos` SET `sequencia`='0' WHERE `id`='6';
+UPDATE `pizzatech`.`produtos` SET `sequencia`='0' WHERE `id`='7';
+

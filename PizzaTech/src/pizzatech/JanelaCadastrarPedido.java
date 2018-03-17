@@ -7,9 +7,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
@@ -23,12 +25,15 @@ public class JanelaCadastrarPedido extends JFrame{
 		JLabel lDigiteNomeCliente = new JLabel("Digite nome do cliente:");
 		JTextField tBuscar = new JTextField(50);
 		JButton bBuscar = new JButton("Buscar");
-		JButton bAdicionar = new JButton("Adicionar");
+		JButton bSelecionar = new JButton("Selecionar");
+		JComboBox cFormaDePagamento = new JComboBox(new String[]{"", "Dinheiro", "Debito", "Credito", "Deposito", "Conta Caderno"});
+		JLabel lEscolhaFormaPagamento = new JLabel("Escolha a forma de pagamento");
 		getContentPane().add(lDigiteNomeCliente);
 		getContentPane().add(tBuscar);
 		getContentPane().add(bBuscar);
 		bBuscar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				modelo1.clear();
 				vecString = Dao.consultarCliente(tBuscar.getText());
 				for(int i = 0; i < vecString.length; i++){
 					modelo1.addElement(vecString[i]);
@@ -38,14 +43,24 @@ public class JanelaCadastrarPedido extends JFrame{
 		});
 		rolagem1.setPreferredSize(new Dimension(600, 150));
 		getContentPane().add(rolagem1);
-		getContentPane().add(bAdicionar);
-		bAdicionar.addActionListener(new ActionListener() {
+		getContentPane().add(lEscolhaFormaPagamento);
+		getContentPane().add(cFormaDePagamento);
+		getContentPane().add(bSelecionar);
+		bSelecionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//new JanelaCadastrarPedido2(vecString[lista1.getSelectedValue()]);
-				dispose();
+				if((!cFormaDePagamento.getSelectedItem().equals("")) && (!lista1.isSelectionEmpty())){
+					int fimDoId = vecString[lista1.getSelectedIndex()].indexOf(";") - 1;
+					String stringSelecionada = vecString[lista1.getSelectedIndex()];
+					String segmentoId = stringSelecionada.substring(0, fimDoId);
+					int id = Integer.valueOf(segmentoId);
+					new JanelaCadastrarPedido2(stringSelecionada, id, (String)cFormaDePagamento.getSelectedItem());
+					System.out.println("JanelaCadastrarPedido2(\"" + stringSelecionada + "\", \"" + id + "\", \"" + (String)cFormaDePagamento.getSelectedItem() + "\"");
+					dispose();
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Escolha o cliente e a forma de pagamento");
+				}
 			}
 		});
-		
-		
 	}
 }
