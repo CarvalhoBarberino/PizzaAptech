@@ -22,10 +22,12 @@ public class JanelaCadastrarPedido2 extends JFrame{
 	ArrayList<Produto> vecProdutoOpcoes = new ArrayList<Produto>();
 	ArrayList<Produto> vecProdutoAdicionado = new ArrayList<Produto>();
 	float total = 0;
+	float entrega = 0;
 	DecimalFormat df = new DecimalFormat("0.00");
 	public JanelaCadastrarPedido2(String clienteString, int idDoCliente, String formaDePagamento){
 		setTitle("Cadastrar Pedidos 2"); setLocation(180, 180); setSize(650, 500); setResizable(true); setDefaultCloseOperation(EXIT_ON_CLOSE); getContentPane().setLayout(new FlowLayout());setVisible(true);
 		int selecionado = 0;
+		JLabel lDigiteProduto = new JLabel("Digite parte do nome do produto");
 		JTextField tBuscar = new JTextField(50);
 		JButton bBuscar = new JButton("Buscar");
 		JButton bAdicionar = new JButton("Adicionar");
@@ -40,6 +42,7 @@ public class JanelaCadastrarPedido2 extends JFrame{
 		JLabel lTrocoPara = new JLabel("Troco para: ");
 		JTextField tTrocoPara = new JTextField(7);
 		tTrocoPara.setText("0");
+		getContentPane().add(lDigiteProduto);
 		getContentPane().add(tBuscar);
 		getContentPane().add(bBuscar);
 		rolagem1.setPreferredSize(new Dimension(600, 150));
@@ -59,7 +62,7 @@ public class JanelaCadastrarPedido2 extends JFrame{
 				if(!((vecProdutoAdicionado.size() < 0) || (formaDePagamento.equals("Dinheiro") && (Integer.valueOf(tTrocoPara.getText()) < total) ))){
 					try{
 						trocoPrevisto = formaDePagamento.equals("Dinheiro") ? Integer.valueOf(tTrocoPara.getText()) - total : 0;
-						Dao.fecharPedido(vecProdutoAdicionado, idDoCliente, Dao.idFuncionario, formaDePagamento, trocoPrevisto);
+						Dao.fecharPedido(vecProdutoAdicionado, idDoCliente, Dao.idFuncionario, formaDePagamento, trocoPrevisto, entrega);
 						new JanelaDeOpcoes();
 						dispose();
 					}catch(Exception err){
@@ -88,11 +91,12 @@ public class JanelaCadastrarPedido2 extends JFrame{
 					vecProdutoAdicionado.add(vecProdutoOpcoes.get(i));
 					modelo2.addElement(vecProdutoOpcoes.get(i).nome + "	|	R$" + df.format(vecProdutoOpcoes.get(i).preco));
 					System.out.println("Adicionado" + vecProdutoOpcoes.get(i).nome + "	|	R$" + vecProdutoOpcoes.get(i).preco);
-					total = 0;
+					entrega = Dao.distanciaPeloId(idDoCliente) * 0.004f;
+					total = entrega;
 					for(int i1 = 0; i1 < vecProdutoAdicionado.size(); i1++){
 						total = total + vecProdutoAdicionado.get(i1).preco;
 					}
-					lTotal.setText("Valor total do pedido: R$" + df.format(total));
+					lTotal.setText("Valor da entrega: " + df.format(entrega) + " | Valor total do pedido: R$" + df.format(total));
 				}
 			}
 		});

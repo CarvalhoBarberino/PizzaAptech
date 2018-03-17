@@ -37,7 +37,6 @@ public class JanelaCadastrarPedido extends JFrame{
 				vecString = Dao.consultarCliente(tBuscar.getText());
 				for(int i = 0; i < vecString.length; i++){
 					modelo1.addElement(vecString[i]);
-					System.out.println(i + " < " + vecString.length + " | " + vecString[i]);
 				}
 			}
 		});

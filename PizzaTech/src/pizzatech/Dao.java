@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +16,7 @@ import javax.swing.JTextArea;
 public class Dao {
 	static final String usuario = "root";
 	static final String senhaDoBancoDeDados = "bancodedados";
+	static DecimalFormat df = new DecimalFormat("0.00");
 	public static int idFuncionario = 0;
 	public static int conferirSenha(String nome, String senha){
 		try{
@@ -147,7 +149,7 @@ public class Dao {
 		}
 		return vecProduto;
 	}
-	public static void fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente, int idFuncionario, String formaDePagamento, float trocoPrevisto){
+	public static void fecharPedido(ArrayList<Produto> vecProduto, int idDoCliente, int idFuncionario, String formaDePagamento, float trocoPrevisto, float entrega){
 		try{
 			String comandoSql;
 			String url = "jdbc:mysql://localhost/pizzatech";
@@ -156,7 +158,7 @@ public class Dao {
 			PreparedStatement pesquisa;
 			ResultSet resultado;
 			String especificacao = "";
-			float preco = 0;
+			float preco = entrega;
 			int[] vecQuant = new int[vecProduto.size()];
 			for(int i = 0; i < vecProduto.size(); i++){//Este laco é importante pois cada elemento precisa inicializar com quantidade = 1
 				vecQuant[i] = 1;
@@ -186,6 +188,7 @@ public class Dao {
 				pesquisa.execute();
 				pesquisa.close();
 			}
+			especificacao = especificacao + "ENTREGA: " + df.format(entrega) + "\n";
 			comandoSql = "INSERT INTO `pizzatech`.`pedidos` (`data`, `idcliente`, `especificacao`, `valor`, `formadepagamento`, `trocoprevisto`, `iddofuncionario`) VALUES ('" + new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "', '" + idDoCliente + "', '" + especificacao + "', '" + preco + "', '" + formaDePagamento + "', '" + trocoPrevisto + "', '" + idFuncionario + "');";
 			System.out.println(comandoSql);
 			imprimirPedido(idDoCliente, idFuncionario, especificacao, formaDePagamento, trocoPrevisto, preco);
@@ -233,19 +236,18 @@ public class Dao {
 			String url = "jdbc:mysql://localhost/pizzatech";
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
-			PreparedStatement pesquisa = conexao.prepareStatement("SELECT nome, telefonefixo, celular, endereco id FROM pizzatech.clientes WHERE id='" + idDoCliente + "';");
+			PreparedStatement pesquisa = conexao.prepareStatement("SELECT nome, telefonefixo, celular, endereco FROM pizzatech.clientes WHERE id='" + idDoCliente + "';");
 			ResultSet resultado = pesquisa.executeQuery();
 			while(resultado.next()){
 				//+ "\nENDERECO: " + resultado.getString("endereco") 
-				imprimir = "CLIENTE: " + resultado.getString("nome") + "\nTELEFONES: " + resultado.getString("telefonefixo") + "    " + resultado.getString("celular") + "\n----------------\n\n";
-				imprimir = imprimir + "\nENDERECO: " + resultado.getString("nome") + "\n";
+				imprimir = "CLIENTE: " + resultado.getString("nome") + "\nTELEFONES: " + resultado.getString("telefonefixo") + "    " + resultado.getString("celular") + "\nENDERECO: " + resultado.getString("endereco") + "\n----------------\n";
 			}
-			imprimir = imprimir + "ESPECIFICAÇÃO:\n" + especificacao + "\n----------------\n\n" + "FORMA DE PAGAMENTO: " + formaDePagamento + "\nTROCO PREVISTO: " + trocoPrevisto + "\nPRECO TOTAL: " + preco;
+			imprimir = imprimir + "ESPECIFICAÇÃO:\n" + especificacao + "\n----------------\n\n" + "FORMA DE PAGAMENTO: " + formaDePagamento + "\nTROCO PREVISTO: " + df.format(trocoPrevisto) + "\nPRECO TOTAL: " + df.format(preco);
 			resultado.close();
 			pesquisa.close();
 			conexao.close();
 			JFrame jImprimirPedido = new JFrame("Imprimir pedido");
-			jImprimirPedido.setBounds(200, 200, 600, 600); jImprimirPedido.setVisible(true);
+			jImprimirPedido.setBounds(400, 200, 600, 600); jImprimirPedido.setVisible(true);
 			JTextArea tArea = new JTextArea();
 			tArea.setSize(500, 400); tArea.setText(imprimir);
 			jImprimirPedido.add(tArea);
@@ -255,7 +257,27 @@ public class Dao {
 			e.printStackTrace();
 		}
 	}
-	
+	public static int distanciaPeloId(int idDoCliente){
+		String sql = "SELECT distanciametros FROM `pizzatech`.`clientes` WHERE id='" + idDoCliente + "';";
+		int resposta = 0;
+		try{
+			String url = "jdbc:mysql://localhost/pizzatech";
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conexao = DriverManager.getConnection(url, usuario, senhaDoBancoDeDados);
+			PreparedStatement pesquisa = conexao.prepareStatement(sql);
+			ResultSet resultado = pesquisa.executeQuery();
+			while(resultado.next()){
+				resposta = resultado.getInt("distanciametros");
+			}
+			resultado.close();
+			pesquisa.close();
+			conexao.close();
+		}catch(Exception err){
+			System.out.println("Erro em:\n    distanciaPeloId(int idDoCliente)");
+			err.printStackTrace();
+		}
+		return resposta;
+	}
 	
 	
 	
